@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b12">
+<title>Realistic AI Video Studio</title>
+<style>
+:root{--bg:#090b12;--panel:#111521;--panel2:#171c2b;--text:#f4f6ff;--muted:#9ba5bb;--accent:#9a7bff;--accent2:#55d6be;--line:#282f42}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#17142c 0%,var(--bg) 48%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:980px;margin:auto;padding:22px 16px 50px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:30px}.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.2px}.logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#9a7bff,#55d6be);display:grid;place-items:center;color:#080a11;font-weight:900}.pill{border:1px solid #3a3457;color:#d4c9ff;background:#17142b;padding:7px 11px;border-radius:999px;font-size:12px}
+.hero{text-align:center;margin:20px auto 26px;max-width:700px}.eyebrow{color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase}.hero h1{font-size:clamp(30px,7vw,54px);line-height:1.06;margin:12px 0}.grad{background:linear-gradient(90deg,#b7a3ff,#65e4d0);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);line-height:1.6;margin:12px auto}
+.card{background:rgba(17,21,33,.92);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 12px 40px #0002}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}.tab{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:13px 8px;color:var(--muted);font-weight:700;cursor:pointer}.tab.active{background:#292144;border-color:#7661c7;color:#fff}
+label{display:block;font-size:13px;font-weight:700;margin:15px 0 8px}textarea,input[type=text],select{width:100%;background:#0b0e17;border:1px solid #30384d;color:var(--text);padding:13px;border-radius:12px;font:inherit;outline:none}textarea{min-height:112px;resize:vertical}textarea:focus,input:focus,select:focus{border-color:var(--accent)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{border:0;border-radius:12px;padding:13px 16px;background:linear-gradient(100deg,#9a7bff,#6d8cff);color:#080912;font-weight:850;font-size:15px;cursor:pointer;width:100%;margin-top:16px}.btn.secondary{background:#22283a;color:#fff;border:1px solid #343d55}.btn:active{transform:scale(.99)}
+.hint{font-size:12px;line-height:1.5;color:var(--muted);margin-top:9px}.notice{border:1px solid #6c5726;background:#241e12;color:#f4d995;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;margin-top:14px}
+.drop{border:1px dashed #555f7b;border-radius:14px;padding:20px;text-align:center;background:#0b0e17}.drop input{max-width:100%;margin-top:10px;color:var(--muted)}video{width:100%;max-height:380px;border-radius:12px;background:#05060a;margin-top:12px;display:none}.status{display:none;margin-top:14px;padding:12px;border-radius:12px;background:#101c1b;border:1px solid #24564d;color:#aaf5e5;font-size:13px;line-height:1.5}.section-title{font-size:18px;margin:0 0 5px}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.feature{padding:14px;border:1px solid var(--line);border-radius:14px;background:#101420}.feature b{display:block;margin:7px 0;font-size:14px}.feature span{color:var(--muted);font-size:12px;line-height:1.5}.foot{text-align:center;color:#717b91;font-size:12px;margin-top:24px}
+@media(max-width:620px){.row,.features{grid-template-columns:1fr}.wrap{padding:16px 12px 36px}.card{padding:14px}.top{margin-bottom:22px}.pill{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo">RV</div><span>Realistic AI Video Studio</span></div>
+    <span class="pill">MOBILE MVP</span>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">Create • Transform • Share</div>
+    <h1>Turn your ideas into <span class="grad">cinematic videos</span></h1>
+    <p>Build a prompt, preview your upload, and prepare your next short-form video. This starter page is free to test on your phone.</p>
+  </section>
+
+  <section class="card">
+    <div class="tabs">
+      <button class="tab active" id="promptTab" type="button" onclick="setMode('prompt')">✨ Prompt to Video</button>
+      <button class="tab" id="transformTab" type="button" onclick="setMode('transform')">🎬 Video to 3D Style</button>
+    </div>
+    <div id="promptPanel">
+      <h2 class="section-title">Describe your video</h2>
+      <div class="hint">Tip: describe the subject, setting, camera movement, lighting, and mood.</div>
+      <label for="prompt">Your prompt</label>
+      <textarea id="prompt" placeholder="Example: A giant silver robot walking through a rainy futuristic Mumbai street, realistic 3D look, cinematic camera movement, reflections, dramatic lighting..."></textarea>
+      <div class="row">
+        <div><label for="ratio">Aspect ratio</label><select id="ratio"><option value="9:16">9:16 — Reels / Shorts</option><option value="16:9">16:9 — YouTube</option><option value="1:1">1:1 — Square</option></select></div>
+        <div><label for="duration">Clip length</label><select id="duration"><option value="5">5 seconds (test)</option><option value="10">10 seconds</option></select></div>
+      </div>
+      <button class="btn" onclick="preparePrompt()">Prepare generation request</button>
+      <div class="hint">This demo does not generate an AI video yet. A real video model/API must be connected to enable generation.</div>
+    </div>
+    <div id="transformPanel" style="display:none">
+      <h2 class="section-title">Transform an existing clip</h2>
+      <p class="hint">Choose a short video and describe the visual style you want. This preview stays on your device in this demo.</p>
+      <div class="drop">
+        <div style="font-size:30px">⬆️</div><b>Select a video from your phone</b>
+        <div class="hint">MP4, MOV, or WebM • keep it short for testing</div>
+        <input type="file" id="videoFile" accept="video/*" onchange="previewVideo(event)">
+      </div>
+      <video id="videoPreview" controls playsinline></video>
+      <label for="stylePrompt">Transformation prompt</label>
+      <textarea id="stylePrompt" placeholder="Transform into realistic cinematic 3D style, natural lighting, detailed textures, preserve the main subject and motion..."></textarea>
+      <button class="btn" onclick="prepareTransform()">Prepare transformation request</button>
+      <div class="hint">A real video-to-video AI model is required to transform the clip. Uploading alone does not convert it.</div>
+    </div>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <div class="notice"><b>Important:</b> This is a working interface demo, not a connected AI generator. No video is uploaded to a server and no paid API is called. Do not charge customers until real generation, privacy, and costs have been tested.</div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">Made for creators</h2>
+    <p class="hint">Start small, test the workflow, then connect a real model when you have access to one.</p>
+    <div class="features">
+      <div class="feature"><div>📱</div><b>Mobile-first</b><span>Designed for phone screens and quick creator workflows.</span></div>
+      <div class="feature"><div>🎞️</div><b>Video preview</b><span>Preview a local video file before planning a transformation.</span></div>
+      <div class="feature"><div>🔒</div><b>Private demo</b><span>Your selected file is previewed locally and not sent anywhere by this page.</span></div>
+    </div>
+  </section>
+  <div class="foot">Realistic AI Video Studio • Free starter interface • AI generation not connected</div>
+</div>
+<script>
+let mode='prompt';
+function setMode(next){
+  mode=next;
+  document.getElementById('promptPanel').style.display=next==='prompt'?'block':'none';
+  document.getElementById('transformPanel').style.display=next==='transform'?'block':'none';
+  document.getElementById('promptTab').classList.toggle('active',next==='prompt');
+  document.getElementById('transformTab').classList.toggle('active',next==='transform');
+  document.getElementById('status').style.display='none';
+}
+function showStatus(message){
+  const el=document.getElementById('status');el.textContent=message;el.style.display='block';
+}
+function preparePrompt(){
+  const p=document.getElementById('prompt').value.trim();
+  if(!p){showStatus('Please enter a prompt first.');return;}
+  const ratio=document.getElementById('ratio').value;
+  const duration=document.getElementById('duration').value;
+  showStatus('Your request is prepared (not generated): '+duration+' seconds, '+ratio+'. To create the actual video, connect a real text-to-video model/API on a secure backend.');
+}
+function previewVideo(event){
+  const file=event.target.files&&event.target.files[0];
+  const video=document.getElementById('videoPreview');
+  if(!file){video.style.display='none';return;}
+  if(!file.type.startsWith('video/')){showStatus('Please select a valid video file.');event.target.value='';return;}
+  const old=video.dataset.objectUrl;
+  if(old)URL.revokeObjectURL(old);
+  const url=URL.createObjectURL(file);video.src=url;video.dataset.objectUrl=url;video.style.display='block';
+  showStatus('Local preview ready: '+file.name+'. The file has not been uploaded or converted.');
+}
+function prepareTransform(){
+  const file=document.getElementById('videoFile').files[0];
+  const p=document.getElementById('stylePrompt').value.trim();
+  if(!file){showStatus('Please select a video first.');return;}
+  if(!p){showStatus('Please describe the visual transformation first.');return;}
+  showStatus('Your transformation request is prepared (not converted). To create a real result, connect a video-to-video AI model/API on a secure backend.');
+}
+</script>
+</body>
+</html>
